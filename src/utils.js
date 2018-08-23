@@ -1,0 +1,1 @@
+export const when = (key, cases) => cases[key]
