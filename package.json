@@ -1,0 +1,23 @@
+{
+  "name": "wallapp-cli",
+  "version": "1.0.0",
+  "description": "WallApp CLI Manager",
+  "main": "index.js",
+  "repository": "https://github.com/simonesestito/wallapp-cli",
+  "author": "Simone Sestito",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "firebase-admin": "^6.0.0",
+    "inquirer": "^6.1.0"
+  },
+  "scripts": {
+    "prestart": "rm -rf build; babel -d ./build ./src --copy-files",
+    "start": "clear; node ./build/index.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
