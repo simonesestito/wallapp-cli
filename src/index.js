@@ -1,5 +1,6 @@
 import { prompt } from "inquirer";
 import { when } from "./utils";
+import categoryMenu from "./categories/index"
 require("babel-polyfill");
 
 const options = [
@@ -17,7 +18,7 @@ const mainMenu = async () => {
   });
 
   when(options.indexOf(choice.mainAction), {
-    0: () => {},
+    0: categoryMenu,
     1: () => {},
     2: () => {}
   })();
