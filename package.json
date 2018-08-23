@@ -7,12 +7,14 @@
   "author": "Simone Sestito",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "cli-spinner": "^0.2.8",
     "firebase-admin": "^6.0.0",
     "inquirer": "^6.1.0"
   },
   "scripts": {
     "prestart": "rm -rf build; babel -d ./build ./src --copy-files",
-    "start": "clear; node ./build/index.js"
+    "start": "clear; node ./build/index.js",
+    "clean": "rm -rf build node_modules yarn.lock && yarn && yarn start"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -18,3 +18,9 @@
 
 
 export const when = (key, cases) => cases[key]
+
+export const checkAssert = (expression, message) => {
+  if (!expression) {
+    throw new Error((message ? message : "Assertion failed") + `: ${expression}`)
+  }
+}

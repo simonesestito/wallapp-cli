@@ -3,17 +3,23 @@ export class Category {
     if (snapshot) {
       this.id = snapshot.id;
       this.count = snapshot.get("count");
-      this.creationDate = snapshot.get("creationDate").toDate();
+      this.creationDate = snapshot.get("creationDate");
       this.description = snapshot.get("description");
       this.displayName = snapshot.get("displayName");
       this.published = snapshot.get("published");
     } else {
       this.id = undefined;
       this.count = 0;
-      this.creationDate = new Date();
+      this.creationDate = undefined; // Assign new Date() below
       this.description = undefined;
       this.displayName = undefined;
       this.published = false;
+    }
+
+    if (this.creationDate && typeof this.creationDate.toDate === "function") {
+      this.creationDate = this.creationDate.toDate();
+    } else {
+      this.creationDate = new Date();
     }
   }
 
@@ -23,7 +29,7 @@ export class Category {
 }
 
 export class Wallpaper {
-  constructor(snapshot) {
+  constructor(categoryId, snapshot) {
     if (snapshot) {
       this.id = snapshot.id;
       this.categoryId = categoryId;
@@ -31,6 +37,7 @@ export class Wallpaper {
       this.published = snapshot.get("published");
     } else {
       this.id = undefined;
+      this.categoryId = undefined;
       this.creationDate = new Date();
       this.published = false;
     }

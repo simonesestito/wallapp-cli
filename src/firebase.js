@@ -26,7 +26,7 @@ admin.initializeApp({
   storageBucket: "wallapp-b7805.appspot.com"
 });
 
-const storage = admin.storage();
+const storage = admin.storage().bucket();
 const firestore = admin.firestore();
 firestore.settings( { timestampsInSnapshots: true })
 

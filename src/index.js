@@ -16,17 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import { prompt } from "inquirer";
 import { when } from "./utils";
-import categoryMenu from "./categories/index"
+import categoryMenu from "./categories";
+import wallpaperMenu from "./wallpaper";
 require("babel-polyfill");
 
-const options = [
-  "Amministra categorie",
-  "Amministra sfondi",
-  "Scansione Firebase"
-];
+const options = ["Amministra categorie", "Amministra sfondi"];
 
 const mainMenu = async () => {
   const choice = await prompt({
@@ -38,9 +34,8 @@ const mainMenu = async () => {
 
   when(options.indexOf(choice.mainAction), {
     0: categoryMenu,
-    1: () => {},
-    2: () => {}
+    1: wallpaperMenu
   })();
 };
 
-mainMenu();
+mainMenu()
