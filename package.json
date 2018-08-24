@@ -15,7 +15,7 @@
   "scripts": {
     "prestart": "bash ./start.sh",
     "start": "clear && node ./build/index.js",
-    "clean": "rm -rf build node_modules yarn.lock && yarn && yarn start"
+    "clean": "rm -rf build node_modules yarn.lock package.lock .old_hash && npm start"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -9,7 +9,11 @@ build() {
 
 # Install dependencies
 if [ ! -d "node_modules" ]; then
-	yarn
+	if command -v yarn > /dev/null; then
+    yarn
+  else
+    npm i
+  fi
 fi
 
 touch .old_hash
