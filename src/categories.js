@@ -17,7 +17,6 @@
  */
 
 import { prompt } from "inquirer";
-import { when } from "./utils";
 import { when, getCategoryStorageUrl, showLoadingPromise } from "./utils";
 import * as firebase from "@google-cloud/firestore";
 import categoryRepo from "./repository/category-repo";
@@ -68,10 +67,8 @@ const editCategory = async category => {
   newCategory.id = category.id;
   newCategory.count = category.count;
 
-  const spinner = new Spinner("Salvataggio in corso...");
-  spinner.start();
-  await categoryRepo.updateCategory(newCategory);
-  spinner.stop();
+  await showLoadingPromise(categoryRepo.updateCategory(newCategory), "Salvataggio in corso");
+
   console.log(
     "Per impostare la cover, carica un file cover.jpg delle corrette dimensioni su\n" +
       getCategoryStorageUrl(newCategory)
@@ -79,15 +76,10 @@ const editCategory = async category => {
 };
 
 export const selectCategory = async () => {
-  const spinner = new Spinner("Caricamento categorie...");
-  spinner.start();
-  const categories = await categoryRepo.getCategories();
-  spinner.stop();
+  const categories = await showLoadingPromise(categoryRepo.getCategories(), "Caricamento categorie");
 
   let humanCategories = [];
-  categories.forEach(c =>
-    humanCategories.push(c.toReadableString())
-  );
+  categories.forEach(c => humanCategories.push(c.toReadableString()));
 
   const choice = await prompt({
     name: "categoryChoice",
@@ -109,10 +101,7 @@ const deleteCategory = async () => {
   });
 
   if (check.verifyId === cat.id) {
-    const spinner = new Spinner("Eliminazione categoria...");
-    spinner.start();
-    await categoryRepo.deleteCategory(cat);
-    spinner.stop();
+    await showLoadingPromise(categoryRepo.deleteCategory(cat), "Eliminazione categoria");
   }
 };
 
@@ -137,31 +126,31 @@ const addCategory = async () => {
     {
       message: "ID",
       name: "id",
-      validate: choice => choice.indexOf(' ') >= 0 ? "ID senza spazi" : true
+      validate: choice => (choice.indexOf(" ") >= 0 ? "ID senza spazi" : true)
     }
   ]);
 
   newCategory.creationDate = new Date();
 
   // Check unique ID
-  let spinner = new Spinner("Verificando ID univoco...");
-  spinner.start();
-  const cat = await categoryRepo.getCategoryById(newCategory.id);
-  spinner.stop();
+  const cat = await showLoadingPromise(categoryRepo.getCategoryById(newCategory.id), "Verificando ID univoco");
   if (cat) {
     console.error(`ID non univoco, categoria già presente ${cat.displayName}`);
     return;
   }
 
-  spinner = new Spinner("Salvataggio categoria...");
-  spinner.start();
-  await categoryRepo.saveNewCategory(newCategory);
-  spinner.stop();
+  await showLoadingPromise(categoryRepo.saveNewCategory(newCategory), "Salvataggio categoria");
   console.log(
     "Per impostare la cover, carica un file cover.jpg delle corrette dimensioni su\n" +
       getCategoryStorageUrl(newCategory)
   );
 };
+
+const uploadCover = async () => {
+  const category = await selectCategory();
+  const url = getCategoryStorageUrl(category);
+  opn(url);
+}
 
 export default async () => {
   const choice = await prompt({
@@ -174,6 +163,7 @@ export default async () => {
   when(index, {
     0: addCategory,
     1: deleteCategory,
-    2: () => selectCategory().then(cat => editCategory(cat))
+    2: () => selectCategory().then(cat => editCategory(cat)),
+    3: uploadCover
   })();
 };
