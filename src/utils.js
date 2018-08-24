@@ -76,7 +76,6 @@ export const showLoadingPromise = async (promise, message = "Caricamento") => {
     result = await promise;
   } finally {
     spinner.stop(true);
-    console.log(""); // Print a new line
   }
   if (result) {
     return result;
