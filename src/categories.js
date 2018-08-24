@@ -18,16 +18,18 @@
 
 import { prompt } from "inquirer";
 import { when } from "./utils";
+import { when, getCategoryStorageUrl, showLoadingPromise } from "./utils";
 import * as firebase from "@google-cloud/firestore";
 import categoryRepo from "./repository/category-repo";
 import { Spinner } from "cli-spinner";
-import { Category } from "./model";
+const opn = require("opn");
 require("babel-polyfill");
 
 const options = [
   "Aggiungi categoria",
   "Rimuovi categoria",
-  "Modifica categoria"
+  "Modifica categoria",
+  "Carica o modifica file cover"
 ];
 
 const yesNo = ["Si", "No"];
@@ -70,6 +72,10 @@ const editCategory = async category => {
   spinner.start();
   await categoryRepo.updateCategory(newCategory);
   spinner.stop();
+  console.log(
+    "Per impostare la cover, carica un file cover.jpg delle corrette dimensioni su\n" +
+      getCategoryStorageUrl(newCategory)
+  );
 };
 
 export const selectCategory = async () => {
@@ -151,6 +157,10 @@ const addCategory = async () => {
   spinner.start();
   await categoryRepo.saveNewCategory(newCategory);
   spinner.stop();
+  console.log(
+    "Per impostare la cover, carica un file cover.jpg delle corrette dimensioni su\n" +
+      getCategoryStorageUrl(newCategory)
+  );
 };
 
 export default async () => {

@@ -17,17 +17,19 @@
  */
 
 import { prompt } from "inquirer";
-import { when } from "./utils";
+import { when, getWallpaperStorageUrl, showLoadingPromise } from "./utils";
 import * as firebase from "@google-cloud/firestore";
 import wallpapersRepo from "./repository/wallpapers-repo";
 import { Spinner } from "cli-spinner";
 import { selectCategory } from "./categories";
+const opn = require("opn");
 require("babel-polyfill");
 
 const options = [
   "Aggiungi sfondo",
   "Rimuovi sfondo",
-  "Modifica sfondo"
+  "Modifica sfondo",
+  "Carica o modifica file"
 ];
 
 const yesNo = ["Si", "No"];
@@ -62,6 +64,10 @@ const editWallpaper = async () => {
   spinner.start();
   await wallpapersRepo.saveWallpaper(wallpaper);
   spinner.stop();
+  console.log(
+    "Per impostare gli sfondi, carica i file delle corrette dimensioni su:\n" +
+      getWallpaperStorageUrl(newWallpaper)
+  );
 };
 
 const selectWallpaper = async () => {
@@ -139,7 +145,17 @@ const addWallpaper = async () => {
   spinner.start();
   await wallpapersRepo.saveWallpaper(newWallpaper);
   spinner.stop();
+  console.log(
+    "Per impostare gli sfondi, carica i file delle corrette dimensioni su:\n" +
+      getWallpaperStorageUrl(newWallpaper)
+  );
 };
+
+const uploadFiles = async () => {
+  const wallpaper = await selectWallpaper();
+  const url = getWallpaperStorageUrl(wallpaper);
+  opn(url);
+}
 
 export default async () => {
   const choice = await prompt({
@@ -153,5 +169,6 @@ export default async () => {
     0: addWallpaper,
     1: deleteWallpaper,
     2: editWallpaper,
+    3: uploadFiles
   })();
 };

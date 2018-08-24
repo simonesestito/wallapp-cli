@@ -16,11 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import * as admin from "firebase-admin";
 const serviceAccount = require("./secret/firebase-admin.json");
 
-admin.initializeApp({
+const app = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://wallapp-b7805.firebaseio.com",
   storageBucket: "wallapp-b7805.appspot.com"
@@ -28,6 +27,8 @@ admin.initializeApp({
 
 const storage = admin.storage().bucket();
 const firestore = admin.firestore();
-firestore.settings( { timestampsInSnapshots: true })
+firestore.settings({ timestampsInSnapshots: true });
 
 export { storage, firestore };
+
+export const BASE_FIREBASE_STORAGE_CONSOLE_URL = `https://console.firebase.google.com/u/0/project/${serviceAccount.project_id}/storage/${app.options.storageBucket}/files`;

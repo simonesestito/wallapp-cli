@@ -16,14 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export const when = (key, cases) => cases[key]
+import { BASE_FIREBASE_STORAGE_CONSOLE_URL } from "./firebase";
+
+export const when = (key, cases) => cases[key];
 
 export const checkAssert = (expression, message) => {
   if (!expression) {
-    throw new Error((message ? message : "Assertion failed") + `: ${expression}`)
+    throw new Error(
+      (message ? message : "Assertion failed") + `: ${expression}`
+    );
   }
-}
+};
 
+/**
+ * Transform an ES6 object into plain JS object
+ * Useful before passing the object to Firestore
+ * @param {Object} obj
+ */
 export const toPlainObject = obj => {
   const plain = {};
   for (const x in obj) {
@@ -32,4 +41,23 @@ export const toPlainObject = obj => {
     }
   }
   return plain;
-}
+};
+
+/**
+ * Get the browsable URL of the category folder in Firebase Storage
+ * @param {Category} category
+ */
+export const getCategoryStorageUrl = category =>
+  BASE_FIREBASE_STORAGE_CONSOLE_URL +
+  encodeURIComponent(`/categories/${category.id}/`).replace(/%/g, "~");
+
+/**
+ * Get the browsable URL of the wallpaper folder in Firebase Storage
+ * @param {Wallpaper} wallpaper
+ */
+export const getWallpaperStorageUrl = wallpaper =>
+  BASE_FIREBASE_STORAGE_CONSOLE_URL +
+  encodeURIComponent(
+    `/categories/${wallpaper.categoryId}/wallpapers/${wallpaper.id}/`
+  ).replace(/%/g, "~");
+

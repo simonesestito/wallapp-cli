@@ -9,7 +9,8 @@
   "dependencies": {
     "cli-spinner": "^0.2.8",
     "firebase-admin": "^6.0.0",
-    "inquirer": "^6.1.0"
+    "inquirer": "^6.1.0",
+    "opn": "^5.3.0"
   },
   "scripts": {
     "prestart": "rm -rf build; babel -d ./build ./src --copy-files",
