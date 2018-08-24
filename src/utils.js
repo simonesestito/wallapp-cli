@@ -17,6 +17,7 @@
  */
 
 import { BASE_FIREBASE_STORAGE_CONSOLE_URL } from "./firebase";
+import { Spinner } from "cli-spinner";
 
 export const when = (key, cases) => cases[key];
 
@@ -61,3 +62,22 @@ export const getWallpaperStorageUrl = wallpaper =>
     `/categories/${wallpaper.categoryId}/wallpapers/${wallpaper.id}/`
   ).replace(/%/g, "~");
 
+/**
+ * Display a Spinner until a Promise if fullfilled
+ * @param {Promise} promise
+ * @param {String} message Message of the spinner
+ */
+export const showLoadingPromise = async (promise, message = "Caricamento") => {
+  const spinner = new Spinner(`${message}...`);
+  spinner.start();
+  let result;
+  try {
+    result = await promise;
+  } finally {
+    spinner.stop(true);
+    console.log(""); // Print a new line
+  }
+  if (result) {
+    return result;
+  }
+};

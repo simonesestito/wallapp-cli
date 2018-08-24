@@ -60,10 +60,7 @@ const editWallpaper = async () => {
   wallpaper.published = newWallpaper.published;
   wallpaper.creationDate = newWallpaper.creationDate;
 
-  const spinner = new Spinner("Salvataggio in corso...");
-  spinner.start();
-  await wallpapersRepo.saveWallpaper(wallpaper);
-  spinner.stop();
+  await showLoadingPromise(wallpapersRepo.saveWallpaper(wallpaper), "Salvataggio in corso");
   console.log(
     "Per impostare gli sfondi, carica i file delle corrette dimensioni su:\n" +
       getWallpaperStorageUrl(newWallpaper)
@@ -72,10 +69,7 @@ const editWallpaper = async () => {
 
 const selectWallpaper = async () => {
   const category = await selectCategory();
-  const spinner = new Spinner("Caricamento sfondi...");
-  spinner.start();
-  const wallpapers = await wallpapersRepo.getWallpapersByCategoryId(category.id);
-  spinner.stop();
+  const wallpapers = await showLoadingPromise(wallpapersRepo.getWallpapersByCategoryId(category.id), "Caricamento sfondi");
 
   let humanWallpapers = [];
   wallpapers.forEach(c =>
@@ -102,10 +96,7 @@ const deleteWallpaper = async () => {
   });
 
   if (check.verifyId === wall.id) {
-    const spinner = new Spinner("Eliminazione sfondo...");
-    spinner.start();
-    await wallpapersRepo.deleteWallpaper(wall);
-    spinner.stop();
+    await showLoadingPromise(wallpapersRepo.deleteWallpaper(wall), "Eliminazione sfondo");
   }
 };
 
@@ -132,19 +123,13 @@ const addWallpaper = async () => {
   newWallpaper.categoryId = category.id;
 
   // Check unique ID
-  let spinner = new Spinner("Verificando ID univoco...");
-  spinner.start();
-  const wall = await wallpapersRepo.getWallpaperById(newWallpaper.categoryId, newWallpaper.id);
-  spinner.stop();
+  const wall = await showLoadingPromise(wallpapersRepo.getWallpaperById(newWallpaper.categoryId, newWallpaper.id), "Verificando ID univoco");
   if (wall) {
     console.error("ID non univoco, wallpaper già presente");
     return;
   }
 
-  spinner = new Spinner("Salvataggio sfondo...");
-  spinner.start();
-  await wallpapersRepo.saveWallpaper(newWallpaper);
-  spinner.stop();
+  await showLoadingPromise(wallpapersRepo.saveWallpaper(newWallpaper), "Salvataggio sfondo");
   console.log(
     "Per impostare gli sfondi, carica i file delle corrette dimensioni su:\n" +
       getWallpaperStorageUrl(newWallpaper)
