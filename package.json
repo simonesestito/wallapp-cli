@@ -13,8 +13,8 @@
     "opn": "^5.3.0"
   },
   "scripts": {
-    "prestart": "rm -rf build; babel -d ./build ./src --copy-files",
-    "start": "clear; node ./build/index.js",
+    "prestart": "bash ./start.sh",
+    "start": "clear && node ./build/index.js",
     "clean": "rm -rf build node_modules yarn.lock && yarn && yarn start"
   },
   "devDependencies": {
