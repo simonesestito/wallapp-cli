@@ -19,9 +19,7 @@ This software is part of WallApp repositories:
 
 - Copy the Firebase private key at <code>src/secret/firebase-admin.json</code>;
 - Install Node.js on your machine;
-- Run <code>npm i -g yarn</code>;
-- Run <code>yarn</code> to install dependencies;
-- Finally, run <code>yarn start</code> to start the app.
+- Finally, run <code>npm start</code> to start the app.
 
 ## License
     Copyright 2018 Simone Sestito
