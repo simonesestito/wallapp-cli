@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- import { checkAssert } from "../utils";
+ import { checkAssert, toPlainObject } from "../utils";
 import { firestore, storage } from "../firebase";
 import { Wallpaper } from "../model";
 import categoryRepo from "./category-repo";
@@ -62,9 +62,7 @@ export default {
   async saveWallpaper(wallpaper) {
     checkWallpaper(wallpaper);
     // Transform to plain js object in case it is ES6 class
-    const time = wallpaper.creationDate;
-    wallpaper = JSON.parse(JSON.stringify(wallpaper))
-    wallpaper.creationDate = time;
+    wallpaper = toPlainObject(wallpaper);
 
     await firestore
       .doc(`categories/${wallpaper.categoryId}/wallpapers/${wallpaper.id}`)

@@ -16,11 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 export const when = (key, cases) => cases[key]
 
 export const checkAssert = (expression, message) => {
   if (!expression) {
     throw new Error((message ? message : "Assertion failed") + `: ${expression}`)
   }
+}
+
+export const toPlainObject = obj => {
+  const plain = {};
+  for (const x in obj) {
+    if (typeof obj[x] !== "function") {
+      plain[x] = obj[x];
+    }
+  }
+  return plain;
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- import { checkAssert } from "../utils";
+ import { checkAssert, toPlainObject } from "../utils";
 import { firestore, storage } from "../firebase";
 import { Category } from "../model";
 import wallpapersRepo from "./wallpapers-repo";
@@ -63,9 +63,7 @@ export default {
     const id = category.id;
 
     // Transform to plain js object in case it is ES6 class
-    const time = category.creationDate;
-    category = JSON.parse(JSON.stringify(category))
-    category.creationDate = time;
+    category = toPlainObject(category);
 
     await firestore.doc(`categories/${id}`).set(category, {
       merge: true
