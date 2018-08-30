@@ -160,10 +160,8 @@ const addCategory = async () => {
   }
 
   await showLoadingPromise(categoryRepo.saveNewCategory(newCategory), "Salvataggio categoria");
-  console.log(
-    "Per impostare la cover, carica un file cover.jpg delle corrette dimensioni su\n" +
-      getCategoryStorageUrl(newCategory)
-  );
+  console.log("Per impostare la cover, carica un file cover.jpg nella finestra del browser");
+  opn(getCategoryStorageUrl(newCategory));
 };
 
 const uploadCover = async () => {
