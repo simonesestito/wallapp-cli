@@ -30,7 +30,9 @@ const checkCategory = category => {
       "Wrong count"
     );
     checkAssert(category.description, "Wrong description");
+    checkAssert(category.description.default, "No default description");
     checkAssert(category.displayName, "Wrong title");
+    checkAssert(category.displayName.default, "No default title");
     checkAssert(category.id, "Wrong ID");
     checkAssert(
       category.published !== undefined && category.published !== null,

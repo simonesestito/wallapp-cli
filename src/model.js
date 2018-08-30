@@ -42,7 +42,7 @@ export class Category {
   }
 
   toReadableString() {
-    return `${this.displayName} (ID: ${this.id})`;
+    return `${this.displayName.default} (ID: ${this.id})`;
   }
 }
 

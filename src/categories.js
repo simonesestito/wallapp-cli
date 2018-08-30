@@ -22,6 +22,7 @@ import * as firebase from "@google-cloud/firestore";
 import categoryRepo from "./repository/category-repo";
 import { Spinner } from "cli-spinner";
 const opn = require("opn");
+import { SUPPORTED_LANGS } from "./constants";
 require("babel-polyfill");
 
 const options = [
@@ -35,16 +36,6 @@ const yesNo = ["Si", "No"];
 
 const editCategory = async category => {
   const newCategory = await prompt([
-    {
-      message: "Titolo",
-      name: "displayName",
-      default: category.displayName
-    },
-    {
-      message: "Descrizione",
-      name: "description",
-      default: category.description
-    },
     {
       type: "list",
       message: "Pubblicato",
@@ -66,6 +57,29 @@ const editCategory = async category => {
   ]);
   newCategory.id = category.id;
   newCategory.count = category.count;
+
+  const displayName = await prompt(
+    SUPPORTED_LANGS.map(lang => {
+      return {
+        name: lang,
+        message: `Titolo (lingua: ${lang})`,
+        default: category.displayName[lang]
+      }
+    })
+  );
+
+  const description = await prompt(
+    SUPPORTED_LANGS.map(lang => {
+      return {
+        name: lang,
+        message: `Descrizione (lingua: ${lang})`,
+        default: category.description[lang]
+      }
+    })
+  );
+
+  newCategory.displayName = displayName;
+  newCategory.description = description;
 
   await showLoadingPromise(categoryRepo.updateCategory(newCategory), "Salvataggio in corso");
 
@@ -108,14 +122,6 @@ const deleteCategory = async () => {
 const addCategory = async () => {
   const newCategory = await prompt([
     {
-      message: "Titolo",
-      name: "displayName"
-    },
-    {
-      message: "Descrizione",
-      name: "description"
-    },
-    {
       type: "list",
       message: "Pubblicato",
       name: "published",
@@ -129,6 +135,28 @@ const addCategory = async () => {
       validate: choice => (choice.indexOf(" ") >= 0 ? "ID senza spazi" : true)
     }
   ]);
+
+  const displayName = await prompt(
+    SUPPORTED_LANGS.map(lang => {
+      return {
+        name: lang,
+        message: `Titolo (lingua: ${lang})`
+      }
+    })
+  );
+
+  const description = await prompt(
+    SUPPORTED_LANGS.map(lang => {
+      return {
+        name: lang,
+        message: `Descrizione (lingua: ${lang})`
+      }
+    })
+  );
+
+  newCategory.displayName = displayName;
+  newCategory.description = description;
+
 
   newCategory.creationDate = new Date();
 
