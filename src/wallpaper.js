@@ -130,10 +130,8 @@ const addWallpaper = async () => {
   }
 
   await showLoadingPromise(wallpapersRepo.saveWallpaper(newWallpaper), "Salvataggio sfondo");
-  console.log(
-    "Per impostare gli sfondi, carica i file delle corrette dimensioni su:\n" +
-      getWallpaperStorageUrl(newWallpaper)
-  );
+  console.log("Per impostare gli, carica i file correttamente nella finestra del browser");
+  opn(getWallpaperStorageUrl(newWallpaper));
 };
 
 const uploadFiles = async () => {
