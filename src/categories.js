@@ -59,23 +59,19 @@ const editCategory = async category => {
   newCategory.count = category.count;
 
   const displayName = await prompt(
-    SUPPORTED_LANGS.map(lang => {
-      return {
-        name: lang,
-        message: `Titolo (lingua: ${lang})`,
-        default: category.displayName[lang]
-      }
-    })
+    SUPPORTED_LANGS.map(lang => ({
+      name: lang,
+      message: `Titolo (lingua: ${lang})`,
+      default: category.displayName[lang]
+    }))
   );
 
   const description = await prompt(
-    SUPPORTED_LANGS.map(lang => {
-      return {
-        name: lang,
-        message: `Descrizione (lingua: ${lang})`,
-        default: category.description[lang]
-      }
-    })
+    SUPPORTED_LANGS.map(lang => ({
+      name: lang,
+      message: `Descrizione (lingua: ${lang})`,
+      default: category.description[lang]
+    }))
   );
 
   newCategory.displayName = displayName;
@@ -137,21 +133,17 @@ const addCategory = async () => {
   ]);
 
   const displayName = await prompt(
-    SUPPORTED_LANGS.map(lang => {
-      return {
-        name: lang,
-        message: `Titolo (lingua: ${lang})`
-      }
-    })
+    SUPPORTED_LANGS.map(lang => ({
+      name: lang,
+      message: `Titolo (lingua: ${lang})`
+    }))
   );
 
   const description = await prompt(
-    SUPPORTED_LANGS.map(lang => {
-      return {
-        name: lang,
-        message: `Descrizione (lingua: ${lang})`
-      }
-    })
+    SUPPORTED_LANGS.map(lang => ({
+      name: lang,
+      message: `Descrizione (lingua: ${lang})`
+    }))
   );
 
   newCategory.displayName = displayName;
