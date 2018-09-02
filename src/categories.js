@@ -49,6 +49,7 @@ const editCategory = async category => {
       message: "Aggiornare la data di creazione?",
       name: "creationDate",
       choices: yesNo,
+      default: 1, // No
       filter: choice =>
         firebase.Timestamp.fromDate(
           choice == yesNo[0] ? new Date() : category.creationDate
