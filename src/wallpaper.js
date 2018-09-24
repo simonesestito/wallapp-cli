@@ -22,6 +22,7 @@ import * as firebase from "@google-cloud/firestore";
 import wallpapersRepo from "./repository/wallpapers-repo";
 import { Spinner } from "cli-spinner";
 import { selectCategory } from "./categories";
+import categoryRepo from "./repository/category-repo";
 const opn = require("opn");
 require("babel-polyfill");
 
@@ -58,10 +59,17 @@ const editWallpaper = async () => {
         )
     }
   ]);
+
   wallpaper.published = newWallpaper.published;
   wallpaper.creationDate = newWallpaper.creationDate;
 
-  await showLoadingPromise(wallpapersRepo.saveWallpaper(wallpaper), "Salvataggio in corso");
+  await showLoadingPromise(
+    Promise.all([
+      wallpapersRepo.saveWallpaper(wallpaper),
+      updateCategoryPromise
+    ]),
+    "Salvataggio in corso"
+  );
   console.log(
     "Per impostare gli sfondi, carica i file delle corrette dimensioni su:\n" +
       getWallpaperStorageUrl(newWallpaper)
@@ -70,12 +78,13 @@ const editWallpaper = async () => {
 
 const selectWallpaper = async () => {
   const category = await selectCategory();
-  const wallpapers = await showLoadingPromise(wallpapersRepo.getWallpapersByCategoryId(category.id), "Caricamento sfondi");
+  const wallpapers = await showLoadingPromise(
+    wallpapersRepo.getWallpapersByCategoryId(category.id),
+    "Caricamento sfondi"
+  );
 
   let humanWallpapers = [];
-  wallpapers.forEach(c =>
-    humanWallpapers.push(c.toReadableString())
-  );
+  wallpapers.forEach(c => humanWallpapers.push(c.toReadableString()));
 
   const choice = await prompt({
     name: "wallChoice",
@@ -97,7 +106,10 @@ const deleteWallpaper = async () => {
   });
 
   if (check.verifyId === wall.id) {
-    await showLoadingPromise(wallpapersRepo.deleteWallpaper(wall), "Eliminazione sfondo");
+    await showLoadingPromise(
+      wallpapersRepo.deleteWallpaper(wall),
+      "Eliminazione sfondo"
+    );
   }
 };
 
@@ -116,7 +128,7 @@ const addWallpaper = async () => {
     {
       message: "ID",
       name: "id",
-      validate: choice => choice.indexOf(' ') >= 0 ? "ID senza spazi" : true
+      validate: choice => (choice.indexOf(" ") >= 0 ? "ID senza spazi" : true)
     }
   ]);
 
@@ -124,14 +136,30 @@ const addWallpaper = async () => {
   newWallpaper.categoryId = category.id;
 
   // Check unique ID
-  const wall = await showLoadingPromise(wallpapersRepo.getWallpaperById(newWallpaper.categoryId, newWallpaper.id), "Verificando ID univoco");
+  const wall = await showLoadingPromise(
+    wallpapersRepo.getWallpaperById(newWallpaper.categoryId, newWallpaper.id),
+    "Verificando ID univoco"
+  );
   if (wall) {
     console.error("ID non univoco, wallpaper già presente");
     return;
   }
 
-  await showLoadingPromise(wallpapersRepo.saveWallpaper(newWallpaper), "Salvataggio sfondo");
-  console.log("Per impostare gli, carica i file correttamente nella finestra del browser");
+  // Update category creation date automatically
+  category.creationDate = firebase.Timestamp.fromDate(new Date())
+  const updateCategoryPromise = categoryRepo
+    .updateCategory(category);
+
+  await showLoadingPromise(
+    Promise.all([
+      wallpapersRepo.saveWallpaper(newWallpaper),
+      updateCategoryPromise
+    ]),
+    "Salvataggio sfondo"
+  );
+  console.log(
+    "Per impostare gli, carica i file correttamente nella finestra del browser"
+  );
   opn(getWallpaperStorageUrl(newWallpaper));
 };
 
@@ -139,7 +167,7 @@ const uploadFiles = async () => {
   const wallpaper = await selectWallpaper();
   const url = getWallpaperStorageUrl(wallpaper);
   opn(url);
-}
+};
 
 export default async () => {
   const choice = await prompt({
