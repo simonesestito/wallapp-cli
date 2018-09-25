@@ -16,14 +16,25 @@ if [ ! -d "node_modules" ]; then
   fi
 fi
 
-touch .old_hash
-old_hash=`cat .old_hash`
-new_hash=`find src -type f | xargs sha1sum | sha1sum`
+if command -v sha1sum > /dev/null; then
+  # Sha1sum is available
+  # Use it to prevent useless compilations
 
-# Rebuild if there's a change
-if [ "$old_hash" != "$new_hash" ]; then
-	build
-	echo "$new_hash" > .old_hash
+  touch .old_hash
+  old_hash=`cat .old_hash`
+  new_hash=`find src -type f | xargs sha1sum | sha1sum`
+
+  # Rebuild if there's a change
+  if [ "$old_hash" != "$new_hash" ]; then
+	  build
+	  echo "$new_hash" > .old_hash
+  else
+	  echo "No changes. No rebuild needed"
+  fi
 else
-	echo "No changes. No rebuild needed"
+  echo "[!] ----- [!]"
+  echo "sha1sum command not available"
+  echo "This will trigger a compilation"
+  echo "[!] ----- [!]"
+  build
 fi
