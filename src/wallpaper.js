@@ -64,10 +64,7 @@ const editWallpaper = async () => {
   wallpaper.creationDate = newWallpaper.creationDate;
 
   await showLoadingPromise(
-    Promise.all([
-      wallpapersRepo.saveWallpaper(wallpaper),
-      updateCategoryPromise
-    ]),
+    wallpapersRepo.saveWallpaper(wallpaper),
     "Salvataggio in corso"
   );
   console.log(
