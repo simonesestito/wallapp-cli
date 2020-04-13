@@ -3,6 +3,11 @@
   "version": "2.0.0",
   "description": "WallApp Administration CLI",
   "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node ./dist/index.js",
+    "clean": "echo TODO"
   },
   "repository": {
     "type": "git",
@@ -13,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/simonesestito/wallapp-cli/issues"
   },
-  "homepage": "https://github.com/simonesestito/wallapp-cli#readme"
+  "homepage": "https://github.com/simonesestito/wallapp-cli#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^13.11.1",
+    "typescript": "^3.8.3"
+  }
 }
