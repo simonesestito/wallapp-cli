@@ -3,9 +3,9 @@
   "version": "2.0.0",
   "description": "WallApp Administration CLI",
   "scripts": {
+    "dev": "npm run build && npm start",
     "prebuild": "npm run clean",
     "build": "tsc",
-    "prestart": "npm run build",
     "start": "node ./dist/index.js",
     "clean": "shx rm -rf dist/"
   },
