@@ -1,0 +1,17 @@
+{
+  "name": "wallapp-cli",
+  "version": "2.0.0",
+  "description": "WallApp Administration CLI",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonesestito/wallapp-cli.git"
+  },
+  "author": "Simone Sestito",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/simonesestito/wallapp-cli/issues"
+  },
+  "homepage": "https://github.com/simonesestito/wallapp-cli#readme"
+}
