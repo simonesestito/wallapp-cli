@@ -19,7 +19,10 @@
     "url": "https://github.com/simonesestito/wallapp-cli/issues"
   },
   "homepage": "https://github.com/simonesestito/wallapp-cli#readme",
-  "dependencies": {},
+  "dependencies": {
+    "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13"
+  },
   "devDependencies": {
     "@types/node": "^13.11.1",
     "shx": "^0.3.2",
