@@ -35,12 +35,12 @@ export interface AWS4Sign {
 @injectable()
 export class Scaleway {
     /**
-      * Upload a file to the app's Scaleway bucket.
-      * The file is uploaded by default as world-readable
-      *
-      * @param file File path or already opened read stream
-      * @param path Path where to save the file on the remote bucket
-      */
+     * Upload a file to the app's Scaleway bucket.
+     * The file is uploaded by default as world-readable
+     *
+     * @param file File path or already opened read stream
+     * @param path Path where to save the file on the remote bucket
+     */
     async uploadFile(file: string | NodeJS.ReadableStream, path: string): Promise<void> {
         let stream: NodeJS.ReadableStream;
 
@@ -60,13 +60,13 @@ export class Scaleway {
     } 
 
     /**
-      * The request is signed with AWS4
-      *
-      * @param config JSON Scaleway configuration
-      * @param method HTTP method
-      * @param path HTTP path to the object
-      * @return AWS4 signed request info
-      */
+     * The request is signed with AWS4
+     *
+     * @param config JSON Scaleway configuration
+     * @param method HTTP method
+     * @param path HTTP path to the object
+     * @return AWS4 signed request info
+     */
     private sign(config: ScalewayConfig,
                  method: string,
                  path: string): AWS4Sign {

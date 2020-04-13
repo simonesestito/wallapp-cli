@@ -29,10 +29,10 @@ export interface CrudRepository<ID, T> {
     get(id: ID): Promise<T | null>
 
     /**
-      * Get all entities
-      *
-      * @return All saved entities
-      */
+     * Get all entities
+     *
+     * @return All saved entities
+     */
     getAll(): Promise<T[]>
 
     /**
