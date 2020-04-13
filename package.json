@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/simonesestito/wallapp-cli#readme",
   "dependencies": {
+    "firebase-admin": "^8.10.0",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13"
   },
