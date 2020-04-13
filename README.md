@@ -16,12 +16,23 @@ This software is part of WallApp repositories:
 - Firebase Admin SDK
 - Node JS
 
-## How to use (for internals)
+## Installation and setup (for WallApp admins)
 
-- Copy the Firebase private key at <code>src/secret/firebase-admin.json</code>;
-- Install Node.js on your machine;
-- On the first time you use this program, run <code>npm install && npm run build</code>
-- Finally, run <code>npm start</code>.
+- Install Node.js, NPM and Git on your machine
+- Open a new terminal window
+- Clone this repo: <code>git clone https://github.com/simonesestito/wallapp-cli --depth 1</code>
+- Open cloned project: <code>cd wallapp-cli</code>
+- Copy both your **Firebase admin** and **Scaleway config** JSON files inside <code>secrets/</code> folder
+- Install project dependecies: <code>npm install</code>
+- Build the project: <code>npm run build</code>
+- _[optional]_ Remove unnecessary dependencies to save storage space on your PC: <code>npm prune --production</code>
+
+## How to start the app (for WallApp admins)
+
+After having done all the steps above, you're good to go.
+Launch the app with the following command (inside cloned _wallapp-cli_ folder):
+
+`node dist`
 
 ## License
     Copyright 2020 Simone Sestito
