@@ -1,13 +1,11 @@
 import { Container } from 'inversify';
-import {
-    FIRESTORE_TYPE,
-    firestore,
-    Scaleway
-} from '../sources';
+import { Firestore } from '@google-cloud/firestore';
+import { firestore, Scaleway } from '../datasource';
 
 const container = new Container();
 
-container.bind(FIRESTORE_TYPE).toConstantValue(firestore);
+// Datasources
+container.bind(Firestore).toConstantValue(firestore);
 container.bind(Scaleway).toSelf();
 
 export { container };

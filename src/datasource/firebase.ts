@@ -2,9 +2,6 @@ import admin from 'firebase-admin';
 import fs from 'fs';
 import { SECRET_FIREBASE_JSON } from '../constants';
 
-// Type used in Inversify
-export const FIRESTORE_TYPE = Symbol.for('firestore');
-
 // Check if Firebase secret JSON file exists
 const jsonExists = fs.existsSync(SECRET_FIREBASE_JSON);
 if (!jsonExists) {
