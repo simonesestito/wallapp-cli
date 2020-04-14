@@ -70,12 +70,12 @@ export class WallpaperRepository implements CrudRepository<WallpaperID, Wallpape
 
     async delete(wallpaperId: WallpaperID): Promise<void> {
         const { id, categoryId } = wallpaperId;
-        const path = `categories/${categoryId}/wallpapers/${id}`;
 
         await this.firestore
-            .doc(path)
+            .collection('categories')
+            .doc(categoryId)
+            .collection('wallpapers')
+            .doc(id)
             .delete();
     }
-
-    // TODO: implement CrudRepository methods
 }
