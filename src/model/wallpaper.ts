@@ -9,4 +9,4 @@ export interface WallpaperData {
     // TODO Author info
 }
 
-export type Wallpaper = WallpaperID | WallpaperData;
+export type Wallpaper = WallpaperID & WallpaperData;
