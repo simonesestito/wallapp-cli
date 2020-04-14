@@ -6,6 +6,9 @@ import {
     WallpaperRepository
 } from './repository';
 import {
+    WallpaperManager
+} from './manager';
+import {
     CategoryUtils,
     TranslationUtils,
     WallpaperUtils
@@ -20,6 +23,9 @@ container.bind(Scaleway).toSelf();
 // Repositories
 container.bind(CategoryRepository).toSelf();
 container.bind(WallpaperRepository).toSelf();
+
+// Managers
+container.bind(WallpaperManager).toSelf();
 
 // Utils
 container.bind(CategoryUtils).toSelf();
