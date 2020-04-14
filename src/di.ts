@@ -2,7 +2,10 @@ import { Container } from 'inversify';
 import { Firestore } from '@google-cloud/firestore';
 import { firestore, Scaleway } from './datasource';
 import { WallpaperRepository } from './repository';
-import { WallpaperUtils } from './utils';
+import {
+    TranslationUtils,
+    WallpaperUtils
+} from './utils';
 
 const container = new Container();
 
@@ -14,6 +17,7 @@ container.bind(Scaleway).toSelf();
 container.bind(WallpaperRepository).toSelf();
 
 // Utils
+container.bind(TranslationUtils).toSelf();
 container.bind(WallpaperUtils).toSelf();
 
 export { container };
