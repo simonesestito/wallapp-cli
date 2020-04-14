@@ -10,7 +10,7 @@
  */
 export interface CrudRepository<ID, T> {
     /**
-     * Insert or update an entity
+     * Insert a new entity with a given ID
      *
      * @param data The data to insert, with the ID
      */
@@ -25,11 +25,11 @@ export interface CrudRepository<ID, T> {
     get(id: ID): Promise<T | null>
 
     /**
-     * Get all entities
+     * Update an existing entity
      *
-     * @return All saved entities
+     * @param data Entity to overwrite
      */
-    getAll(): Promise<T[]>
+    update(data: T): Promise<void>
 
     /**
      * Remove a specified entity by its ID
