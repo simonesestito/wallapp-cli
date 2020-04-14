@@ -2,10 +2,6 @@
  * Interface defining a CRUD repository
  * It has to be implemented by every repository
  *
- * If an implementation has to deal with multiple entities,
- * it should be a Manager instead of a Repository.
- * Managers are intended more high-level classes.
- *
  * An implementation has to specify two generic types:
  * - ID: the ID of the model
  * - T: the model interface itself
