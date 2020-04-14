@@ -3,6 +3,7 @@ import { Firestore } from '@google-cloud/firestore';
 import { firestore, Scaleway } from './datasource';
 import { WallpaperRepository } from './repository';
 import {
+    CategoryUtils,
     TranslationUtils,
     WallpaperUtils
 } from './utils';
@@ -17,6 +18,7 @@ container.bind(Scaleway).toSelf();
 container.bind(WallpaperRepository).toSelf();
 
 // Utils
+container.bind(CategoryUtils).toSelf();
 container.bind(TranslationUtils).toSelf();
 container.bind(WallpaperUtils).toSelf();
 
