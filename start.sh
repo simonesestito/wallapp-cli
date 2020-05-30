@@ -35,5 +35,6 @@ else
   build
 fi
 
-clear
+echo
+echo
 node build/index.js
