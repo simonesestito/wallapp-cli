@@ -25,6 +25,7 @@ export class Category {
       this.description = snapshot.get("description");
       this.displayName = snapshot.get("displayName");
       this.published = snapshot.get("published");
+      this.group = snapshot.get("group");
     } else {
       this.id = undefined;
       this.count = 0;
