@@ -17,7 +17,7 @@
  */
 
 import { checkAssert, toPlainObject } from "../utils";
-import { firestore, storage } from "../firebase";
+import { firestore } from "../firebase";
 import { Wallpaper } from "../model";
 import categoryRepo from "./category-repo";
 require("babel-polyfill");
@@ -64,16 +64,15 @@ export default {
     // Transform to plain js object in case it is ES6 class
     wallpaper = toPlainObject(wallpaper);
 
+    const { id, categoryId } = wallpaper;
+    delete wallpaper.id;
+    delete wallpaper.categoryId;
+
     await firestore
-      .doc(`categories/${wallpaper.categoryId}/wallpapers/${wallpaper.id}`)
+      .doc(`categories/${categoryId}/wallpapers/${id}`)
       .set(wallpaper);
 
-    const category = await categoryRepo.getCategoryById(wallpaper.categoryId);
-
-    await storage
-      .file(`categories/${category.id}/wallpapers/${wallpaper.id}/.nomedia`)
-      .save(" ");
-
+    const category = await categoryRepo.getCategoryById(categoryId);
     await categoryRepo.updateWallCount(category);
   },
 
@@ -83,10 +82,6 @@ export default {
     await firestore
       .doc(`categories/${wallpaper.categoryId}/wallpapers/${wallpaper.id}`)
       .delete();
-
-    await storage.deleteFiles({
-      prefix: `categories/${wallpaper.categoryId}/wallpapers/${wallpaper.id}`
-    });
 
     const category = await categoryRepo.getCategoryById(wallpaper.categoryId);
     await categoryRepo.updateWallCount(category);

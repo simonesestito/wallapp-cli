@@ -20,16 +20,18 @@ import { prompt } from "inquirer";
 import { when, getCategoryStorageUrl, showLoadingPromise } from "./utils";
 import * as firebase from "@google-cloud/firestore";
 import categoryRepo from "./repository/category-repo";
-import { Spinner } from "cli-spinner";
-const opn = require("opn");
 import { SUPPORTED_LANGS } from "./constants";
 require("babel-polyfill");
 
 const options = [
   "Aggiungi categoria",
   "Rimuovi categoria",
-  "Modifica categoria",
-  "Carica o modifica file cover"
+  "Modifica categoria"
+];
+
+const groups = [
+  "community",
+  "original"
 ];
 
 const yesNo = ["Si", "No"];
@@ -43,6 +45,13 @@ const editCategory = async category => {
       choices: yesNo,
       default: category.published ? 0 : 1,
       filter: choice => choice == yesNo[0]
+    },
+    {
+      type: "list",
+      message: "Gruppo",
+      name: "group",
+      choices: groups,
+      default: category.group ? groups.indexOf(category.group) : 0
     },
     {
       type: "list",
@@ -127,6 +136,13 @@ const addCategory = async () => {
       filter: choice => choice == yesNo[0]
     },
     {
+      type: "list",
+      message: "Gruppo",
+      name: "group",
+      choices: groups,
+      default: 0
+    },
+    {
       message: "ID",
       name: "id",
       validate: choice => (choice.indexOf(" ") >= 0 ? "ID senza spazi" : true)
@@ -161,15 +177,7 @@ const addCategory = async () => {
   }
 
   await showLoadingPromise(categoryRepo.saveNewCategory(newCategory), "Salvataggio categoria");
-  console.log("Per impostare la cover, carica un file cover.jpg nella finestra del browser");
-  opn(getCategoryStorageUrl(newCategory));
 };
-
-const uploadCover = async () => {
-  const category = await selectCategory();
-  const url = getCategoryStorageUrl(category);
-  opn(url);
-}
 
 export default async () => {
   const choice = await prompt({
@@ -183,6 +191,5 @@ export default async () => {
     0: addCategory,
     1: deleteCategory,
     2: () => selectCategory().then(cat => editCategory(cat)),
-    3: uploadCover
   })();
 };

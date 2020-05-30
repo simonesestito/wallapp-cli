@@ -53,11 +53,17 @@ export class Wallpaper {
       this.categoryId = categoryId;
       this.creationDate = snapshot.get("creationDate").toDate();
       this.published = snapshot.get("published");
+      this.authorBio = snapshot.get("authorBio");
+      this.authorName = snapshot.get("authorName");
+      this.authorSocial = snapshot.get("authorSocial");
     } else {
       this.id = undefined;
       this.categoryId = undefined;
       this.creationDate = new Date();
       this.published = false;
+      this.authorBio = undefined;
+      this.authorName = undefined;
+      this.authorSocial = undefined;
     }
   }
 

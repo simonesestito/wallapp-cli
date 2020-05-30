@@ -4,16 +4,12 @@ set -e
 
 build() {
 	rm -rf build/
-	babel -d ./build ./src --copy-files
+	npx babel -d ./build ./src --copy-files
 }
 
 # Install dependencies
 if [ ! -d "node_modules" ]; then
-	if command -v yarn > /dev/null; then
-    yarn
-  else
     npm i
-  fi
 fi
 
 if command -v sha1sum > /dev/null; then
@@ -38,3 +34,6 @@ else
   echo "[!] ----- [!]"
   build
 fi
+
+clear
+node build/index.js

@@ -17,20 +17,16 @@
  */
 
 import { prompt } from "inquirer";
-import { when, getWallpaperStorageUrl, showLoadingPromise } from "./utils";
+import { when, showLoadingPromise } from "./utils";
 import * as firebase from "@google-cloud/firestore";
 import wallpapersRepo from "./repository/wallpapers-repo";
-import { Spinner } from "cli-spinner";
 import { selectCategory } from "./categories";
 import categoryRepo from "./repository/category-repo";
-const opn = require("opn");
-require("babel-polyfill");
 
 const options = [
   "Aggiungi sfondo",
   "Rimuovi sfondo",
-  "Modifica sfondo",
-  "Carica o modifica file"
+  "Modifica sfondo"
 ];
 
 const yesNo = ["Si", "No"];
@@ -57,19 +53,33 @@ const editWallpaper = async () => {
         firebase.Timestamp.fromDate(
           choice == yesNo[0] ? new Date() : wallpaper.creationDate
         )
+    },
+    {
+      name: "authorName",
+      message: "Nome autore (Vuoto per non impostarlo)",
+      default: wallpaper.authorName || ""
+    },
+    {
+      name: "authorBio",
+      message: "Bio autore (Vuoto per non impostarlo)",
+      default: wallpaper.authorBio || ""
+    },
+    {
+      name: "authorSocial",
+      message: "Link autore (Vuoto per non impostarlo)",
+      default: wallpaper.authorSocial || ""
     }
   ]);
 
   wallpaper.published = newWallpaper.published;
   wallpaper.creationDate = newWallpaper.creationDate;
+  wallpaper.authorName = newWallpaper.authorName || null;
+  wallpaper.authorBio = newWallpaper.authorBio || null;
+  wallpaper.authorSocial = newWallpaper.authorSocial || null;
 
   await showLoadingPromise(
     wallpapersRepo.saveWallpaper(wallpaper),
     "Salvataggio in corso"
-  );
-  console.log(
-    "Per impostare gli sfondi, carica i file delle corrette dimensioni su:\n" +
-      getWallpaperStorageUrl(newWallpaper)
   );
 };
 
@@ -126,11 +136,29 @@ const addWallpaper = async () => {
       message: "ID",
       name: "id",
       validate: choice => (choice.indexOf(" ") >= 0 ? "ID senza spazi" : true)
+    },
+    {
+      name: "authorName",
+      message: "Nome autore (Vuoto per non impostarlo)",
+      default: ""
+    },
+    {
+      name: "authorBio",
+      message: "Bio autore (Vuoto per non impostarlo)",
+      default: ""
+    },
+    {
+      name: "authorSocial",
+      message: "Link autore (Vuoto per non impostarlo)",
+      default: ""
     }
   ]);
 
   newWallpaper.creationDate = new Date();
   newWallpaper.categoryId = category.id;
+  newWallpaper.authorName = newWallpaper.authorName || null;
+  newWallpaper.authorBio = newWallpaper.authorBio || null;
+  newWallpaper.authorSocial = newWallpaper.authorSocial || null;
 
   // Check unique ID
   const wall = await showLoadingPromise(
@@ -154,16 +182,6 @@ const addWallpaper = async () => {
     ]),
     "Salvataggio sfondo"
   );
-  console.log(
-    "Per impostare gli, carica i file correttamente nella finestra del browser"
-  );
-  opn(getWallpaperStorageUrl(newWallpaper));
-};
-
-const uploadFiles = async () => {
-  const wallpaper = await selectWallpaper();
-  const url = getWallpaperStorageUrl(wallpaper);
-  opn(url);
 };
 
 export default async () => {
@@ -177,7 +195,6 @@ export default async () => {
   when(index, {
     0: addWallpaper,
     1: deleteWallpaper,
-    2: editWallpaper,
-    3: uploadFiles
+    2: editWallpaper
   })();
 };

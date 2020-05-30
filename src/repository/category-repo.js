@@ -34,6 +34,7 @@ const checkCategory = category => {
     checkAssert(category.displayName, "Wrong title");
     checkAssert(category.displayName.default, "No default title");
     checkAssert(category.id, "Wrong ID");
+    checkAssert(category.group, "Wrong group");
     checkAssert(
       category.published !== undefined && category.published !== null,
       "Wrong publish state"
@@ -62,10 +63,11 @@ export default {
 
   async updateCategory(category) {
     checkCategory(category);
-    const id = category.id;
-
     // Transform to plain js object in case it is ES6 class
     category = toPlainObject(category);
+
+    const id = category.id;
+    delete category.id;   
 
     await firestore.doc(`categories/${id}`).set(category, {
       merge: true
@@ -75,9 +77,10 @@ export default {
   async saveNewCategory(category) {
     category.count = 0;
     checkCategory(category);
-    await firestore.doc(`categories/${category.id}`).set(category);
-
-    await storage.file(`categories/${category.id}/.nomedia`).save(" ");
+    category = toPlainObject(category);
+    const id = category.id;
+    delete category.id;
+    await firestore.doc(`categories/${id}`).set(category);
   },
 
   async deleteCategory(category) {
