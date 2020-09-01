@@ -1,6 +1,6 @@
 /*
  * This file is part of WallApp CLI Manager.
- * Copyright (C) 2018  Simone Sestito
+ * Copyright (C) 2018-2020  Simone Sestito
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import * as firebase from "@google-cloud/firestore";
 import wallpapersRepo from "./repository/wallpapers-repo";
 import { selectCategory } from "./categories";
 import categoryRepo from "./repository/category-repo";
+import * as fs from 'fs';
 
 const options = [
   "Aggiungi sfondo",
@@ -138,27 +139,40 @@ const addWallpaper = async () => {
       validate: choice => (choice.indexOf(" ") >= 0 ? "ID senza spazi" : true)
     },
     {
-      name: "authorName",
-      message: "Nome autore (Vuoto per non impostarlo)",
-      default: ""
-    },
-    {
-      name: "authorBio",
-      message: "Bio autore (Vuoto per non impostarlo)",
-      default: ""
-    },
-    {
-      name: "authorSocial",
-      message: "Link autore (Vuoto per non impostarlo)",
-      default: ""
+      type: "list",
+      name: "community",
+      message: "Sfondo community?",
+      choices: yesNo,
+      default: 1,
+      filter: choice => choice == yesNo[0]
     }
   ]);
 
   newWallpaper.creationDate = new Date();
   newWallpaper.categoryId = category.id;
-  newWallpaper.authorName = newWallpaper.authorName || null;
-  newWallpaper.authorBio = newWallpaper.authorBio || null;
-  newWallpaper.authorSocial = newWallpaper.authorSocial || null;
+
+  if (newWallpaper.community) {
+    // Check author file
+    const authorFile = process.cwd() + '/autore.txt';
+    const authorFileStat = fs.statSync(authorFile);
+    if (!authorFileStat.isFile) {
+      console.error('File ' + authorFile + ' non trovato!');
+      process.exit(1);
+    }
+
+    const authorFileContent = fs.readFileSync(authorFile, { encoding: 'utf-8' });
+    [
+      newWallpaper.authorName,
+      newWallpaper.authorBio,
+      newWallpaper.authorSocial
+    ] = authorFileContent.split('\n');
+  } else {
+    newWallpaper.authorName = null;
+    newWallpaper.authorBio = null;
+    newWallpaper.authorSocial = null;
+  }
+
+  delete newWallpaper.community;
 
   // Check unique ID
   const wall = await showLoadingPromise(

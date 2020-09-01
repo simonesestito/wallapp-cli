@@ -22,7 +22,7 @@ This software is part of WallApp repositories:
 - Finally, run <code>npm start</code> to start the app. All dependencies will be automatically installed using your favourite package manager (npm or yarn) and it will also be built with Babel.
 
 ## License
-    Copyright 2018 Simone Sestito
+    Copyright 2018-2020 Simone Sestito
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
