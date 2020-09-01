@@ -134,11 +134,6 @@ const addWallpaper = async () => {
       filter: choice => choice == yesNo[0]
     },
     {
-      message: "ID",
-      name: "id",
-      validate: choice => (choice.indexOf(" ") >= 0 ? "ID senza spazi" : true)
-    },
-    {
       type: "list",
       name: "community",
       message: "Sfondo community?",
@@ -174,20 +169,19 @@ const addWallpaper = async () => {
 
   delete newWallpaper.community;
 
-  // Check unique ID
-  const wall = await showLoadingPromise(
-    wallpapersRepo.getWallpaperById(newWallpaper.categoryId, newWallpaper.id),
-    "Verificando ID univoco"
+  // Populate ID
+  const walls = await showLoadingPromise(
+    wallpapersRepo.getWallpapersByCategoryId(newWallpaper.categoryId),
+    "Calcolando ID incrementale"
   );
-  if (wall) {
-    console.error("ID non univoco, wallpaper già presente");
-    return;
-  }
+  const wallIds = walls.filter(wall => Number.parseInt(wall.id) == wall.id)
+    .map(wall => Number.parseInt(wall.id));
+  const lastId = wallIds.length > 0 ? Math.max(...wallIds) : 0;
+  newWallpaper.id = lastId + 1;
 
   // Update category creation date automatically
   category.creationDate = firebase.Timestamp.fromDate(new Date())
-  const updateCategoryPromise = categoryRepo
-    .updateCategory(category);
+  const updateCategoryPromise = categoryRepo.updateCategory(category);
 
   await showLoadingPromise(
     Promise.all([
